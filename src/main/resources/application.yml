@@ -1,0 +1,17 @@
+server:
+  port: 8171
+
+spring:
+  application:
+    name: mcoder-admin
+  http:
+    encoding:
+      force: true
+  profiles:
+    active: ${activeProfile:develop}
+  mvc:
+      # 出现异常时直接抛出，由@ControllerAdvice标记的类统一处理
+    throw-exception-if-no-handler-found: true
+    static-path-pattern: /**
+  thymeleaf:
+    mode: HTML5
