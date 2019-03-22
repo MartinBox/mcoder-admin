@@ -40,7 +40,7 @@
         where t.parent_id = -1
     </select>
 
-    <select id="getSubMenuByParentId" resultMap="resultMap">
+    <select id="getSubMenuByParentId" resultType="com.mcoder.admin.entity.Menu">
         select distinct t.*
         from tbl_sys_base_res_auth ra
         inner join tbl_sys_base_menu t
@@ -89,7 +89,10 @@
         and ra.resource_type = 'menu'
         where t.parent_id != -1) s on p.id=s.parent_id
     </select>-->
-    <select id="selectAuthorityMenuByUserId">
+    <select id="selectAllMenus" resultType="com.mcoder.admin.entity.Menu">
+     select * from tbl_sys_base_menu
+  </select>
+    <select id="selectAuthorityMenuByUserId" resultType="com.mcoder.admin.entity.Menu">
      select distinct t.*
      from tbl_sys_base_res_auth ra
      inner join tbl_sys_base_menu t
@@ -103,16 +106,16 @@
      and ra.resource_type = 'menu'
   </select>
 
-    <select id="selectAuthoritySystemByUserId">
+    <select id="selectAuthoritySystemByUserId" resultType="com.mcoder.admin.entity.Menu">
         select distinct t.*
         from tbl_sys_base_res_auth ra
         inner join tbl_sys_base_menu t
         on ra.resource_id = t.id
-        and ra.authority_id in (
+        /*and ra.authority_id in (
         select group_id from tbl_sys_base_group_member where user_id = #{userId}
         union
         select group_id from tbl_sys_base_group_leader where user_id = #{userId}
-        )
+        )*/
         and ra.authority_type = 'group'
         and ra.resource_type = 'menu'
         where t.parent_id = -1

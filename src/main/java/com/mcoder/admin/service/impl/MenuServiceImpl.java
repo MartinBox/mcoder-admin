@@ -1,6 +1,5 @@
 package com.mcoder.admin.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.mcoder.admin.entity.Menu;
 import com.mcoder.admin.mapper.MenuMapper;
@@ -24,11 +23,11 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
 
     @Override
     public List<Menu> getUserAuthorityMenuByUserId(int id) {
-        return null;
+        return baseMapper.selectAllMenus();
     }
 
     @Override
     public List<Menu> getUserAuthoritySystemByUserId(int id) {
-        return null;
+        return baseMapper.selectAuthoritySystemByUserId(id);
     }
 }

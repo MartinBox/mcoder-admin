@@ -101,7 +101,7 @@ public class DatasourceConfiguration {
     private GlobalConfig globalConfig() {
         GlobalConfig conf = new GlobalConfig();
         conf.setDbConfig(new GlobalConfig.DbConfig()
-                .setDbType(DbType.ORACLE)
+                .setDbType(DbType.SQLITE)
                 .setKeyGenerator(new OracleKeyGenerator())
                 .setIdType(IdType.INPUT));
         conf.setRefresh(mybatisPlusConfig.getGlobal().isRefresh());

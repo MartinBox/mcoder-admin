@@ -6,6 +6,8 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 public interface MenuMapper extends CustBaseMapper<Menu> {
+    List<Menu> selectAllMenus();
+
     List<Menu> getAllMenusByTree();
 
     List<Menu> selectMenuByAuthorityId(@Param("authorityId") String authorityId, @Param("authorityType") String authorityType);
