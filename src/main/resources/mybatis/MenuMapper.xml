@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mcoder.admin.mapper.MenuMapper">
+
+    <resultMap id="resultMap" type="com.mcoder.admin.entity.Menu">
+        <id property="id" column="id"/>
+        <result property="code" column="CODE"/>
+        <result property="title" column="TITLE"/>
+        <result property="parentId" column="PARENT_ID"/>
+        <result property="href" column="HREF"/>
+        <result property="icon" column="ICON"/>
+        <result property="type" column="TYPE"/>
+        <result property="orderNum" column="ORDER_NUM"/>
+        <result property="description" column="DESCRIPTION"/>
+        <result property="path" column="PATH"/>
+        <result property="crtTime" column="CRT_TIME"/>
+        <result property="crtUser" column="CRT_USER"/>
+        <result property="crtName" column="CRT_NAME"/>
+        <result property="crtHost" column="CRT_HOST"/>
+        <result property="updTime" column="UPD_TIME"/>
+        <result property="updUser" column="UPD_USER"/>
+        <result property="updName" column="UPD_NAME"/>
+        <result property="updHost" column="UPD_HOST"/>
+        <collection column="id" property="subMenu" ofType="com.mcoder.admin.entity.Menu" javaType="java.util.ArrayList"
+                    select="getSubMenuByParentId"/>
+    </resultMap>
+
+    <select id="getAllMenusByTree" resultMap="resultMap">
+        select distinct t.*
+        from tbl_sys_base_res_auth ra
+        inner join tbl_sys_base_menu t
+        on ra.resource_id = t.id
+        and ra.authority_id in (
+        select group_id from tbl_sys_base_group_member where user_id = 1
+        union
+        select group_id from tbl_sys_base_group_leader where user_id = 1
+        )
+        and ra.authority_type = 'group'
+        and ra.resource_type = 'menu'
+        where t.parent_id = -1
+    </select>
+
+    <select id="getSubMenuByParentId" resultMap="resultMap">
+        select distinct t.*
+        from tbl_sys_base_res_auth ra
+        inner join tbl_sys_base_menu t
+        on ra.resource_id = t.id
+        and ra.authority_id in (
+        select group_id from tbl_sys_base_group_member where user_id = 1
+        union
+        select group_id from tbl_sys_base_group_leader where user_id = 1
+        )
+        and ra.authority_type = 'group'
+        and ra.resource_type = 'menu'
+        where t.parent_id = #{id}
+    </select>
+    <!-- <select id="getAllMenusByTree" resultType="com.mcoder.admin.entity.Menu">
+         SELECT *
+         FROM tbl_sys_base_element
+         &lt;!&ndash; 判断 wrapper 是否为空 emptyOfWhere &ndash;&gt;
+         <where>
+             ${ew.sqlSegment}
+         </where>
+     </select>-->
+    <!--<select id="getAllMenusByTree" resultType="com.mcoder.admin.entity.Menu">
+        with tbl_menu as (select distinct t.*
+        from tbl_sys_base_res_auth ra
+        inner join tbl_sys_base_menu t
+        on ra.resource_id = t.id
+        and ra.authority_id in (
+        select group_id from tbl_sys_base_group_member where user_id = 1
+        union
+        select group_id from tbl_sys_base_group_leader where user_id = 1
+        )
+        and ra.authority_type = 'group'
+        and ra.resource_type = 'menu'
+        where t.parent_id = -1)
+        select p.*,s.* from tbl_menu p
+        left join (select distinct t.*
+                from tbl_sys_base_res_auth ra
+        inner join tbl_sys_base_menu t
+        on ra.resource_id = t.id
+        and ra.authority_id in (
+        select group_id from tbl_sys_base_group_member where user_id = 1
+        union
+        select group_id from tbl_sys_base_group_leader where user_id = 1
+        )
+        and ra.authority_type = 'group'
+        and ra.resource_type = 'menu'
+        where t.parent_id != -1) s on p.id=s.parent_id
+    </select>-->
+    <select id="selectAuthorityMenuByUserId">
+     select distinct t.*
+     from tbl_sys_base_res_auth ra
+     inner join tbl_sys_base_menu t
+     on ra.resource_id = t.id
+     and ra.authority_id in (
+       select group_id from tbl_sys_base_group_member where user_id = #{userId}
+       union
+       select group_id from tbl_sys_base_group_leader where user_id = #{userId}
+     )
+     and ra.authority_type = 'group'
+     and ra.resource_type = 'menu'
+  </select>
+
+    <select id="selectAuthoritySystemByUserId">
+        select distinct t.*
+        from tbl_sys_base_res_auth ra
+        inner join tbl_sys_base_menu t
+        on ra.resource_id = t.id
+        and ra.authority_id in (
+        select group_id from tbl_sys_base_group_member where user_id = #{userId}
+        union
+        select group_id from tbl_sys_base_group_leader where user_id = #{userId}
+        )
+        and ra.authority_type = 'group'
+        and ra.resource_type = 'menu'
+        where t.parent_id = -1
+    </select>
+</mapper>

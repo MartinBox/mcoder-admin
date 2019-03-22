@@ -15,3 +15,36 @@ spring:
     static-path-pattern: /**
   thymeleaf:
     mode: HTML
+
+logging:
+  path: ${LOG_PATH:logs}
+  file: ${spring.application.name}.log
+  config: classpath:logback-spring.xml
+
+mybatis:
+  configLocation: /mybatis/mybatis-config.xml
+  basePackage: com.mcoder.admin.mapper
+  mapperLocations: classpath:mybatis/*Mapper.xml
+
+mybatis-plus:
+  global:
+    # 是否自动刷新 Mapper 对应的 XML 文件，默认不自动刷新。
+    # Mapper 对应的 XML 文件会自动刷新，更改 XML 文件后，无需再次重启工程，由此节省大量时间
+    # 该配置不建议在生产环境打开！
+    refresh: true
+
+druid:
+  name: ${spring.application.name}
+  username:
+  password:
+  url: jdbc:sqlite:config\server.db
+  initialSize: 10
+  minIdle: 10
+  maxActive: 50
+  maxWait: 300000
+  validationQuery: SELECT 'x'
+  maxPoolPreparedStatementPerConnectionSize: 0
+  removeAbandoned: true
+  logAbandoned: true
+  monitor:
+    url: /status/druid/*
